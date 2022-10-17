@@ -1,0 +1,13 @@
+{
+  "name": "projetandoflores",
+  "version": "1.0.0",
+  "description": "Projeto de flores",
+  "main": "index.js",
+  "type": "module",
+  "author": "jefferson",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^2.3.3"
+  }
+}
