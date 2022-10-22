@@ -4,9 +4,12 @@ import { conexao } from "../../../db/conexao"
 class ControllerCidade {
     buscar(req: Request, res: Response) {
         conexao.query("SELECT * FROM tbl_cidade", function (erro, dados, campos) {
-            if (erro)
+            if (erro) {
                 console.log(erro)
-            return res.json(dados)
+                return res.status(500).json({ status: "ERRO AO BUSCAR CIDADES" })
+            } else {
+                return res.status(200).json(dados)
+            }
         })
     }
 
@@ -15,9 +18,12 @@ class ControllerCidade {
         conexao.query("SELECT * FROM tbl_cidade WHERE id_Cidade = ?",
             [id],
             function (erro, dados, campos) {
-                if (erro)
+                if (erro) {
                     console.log(erro)
-                return res.json(dados)
+                    return res.status(500).json({ status: "ERRO AO BUSCAR CIDADE" })
+                } else {
+                    return res.status(200).json(dados)
+                }
             })
     }
 
@@ -56,7 +62,7 @@ class ControllerCidade {
             [id],
             function (erro, dados, campos) {
                 if (!erro) {
-                    return res.status(201).json({ status: "CIDADE EXCLUIDA COM SUCESSO" })
+                    return res.status(201).json({ status: "CIDADE EXCLUÍDA COM SUCESSO" })
                 } else {
                     console.log(erro)
                     return res.status(500).json({ status: "ERRO AO EXCLUIR CIDADE" })

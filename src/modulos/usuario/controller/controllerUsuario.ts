@@ -6,9 +6,12 @@ class ControllerUsuario {
     buscar(req: Request, res: Response) {
         conexao.query("SELECT nome, login, email, id_usuario FROM tbl_usuario",
             function (erro, dados, campos) {
-                if (erro)
+                if (erro) {
                     console.log(erro)
-                return res.json(dados)
+                    return res.status(500).json({ status: "ERRO AO BUSCAR USUARIOS" })
+                } else {
+                    return res.status(200).json(dados)
+                }
             })
     }
 
@@ -16,9 +19,12 @@ class ControllerUsuario {
         const { id } = req.params
         conexao.query('SELECT nome, login, email, id_usuario FROM tbl_usuario WHERE id_usuario = ?',
             [id], function (erro, dados, campos) {
-                if (erro)
+                if (erro) {
                     console.log(erro)
-                return res.json(dados)
+                    return res.status(500).json({ status: "ERRO AO BUSCAR USUARIO" })
+                } else {
+                    return res.status(200).json(dados)
+                }
             })
     }
 
@@ -29,10 +35,10 @@ class ControllerUsuario {
             [nome, login, senhaCriptografada, email],
             function (erro, dados, campos) {
                 if (!erro) {
-                    return res.status(201).json({ status: 'USUARIO CADASTRADO COM SUCESSO' })
+                    return res.status(201).json({ status: "USUARIO CADASTRADO COM SUCESSO" })
                 } else {
                     console.log(erro)
-                    return res.status(500).json({ status: 'ERRO AO CADASTRAR USUARIO' })
+                    return res.status(500).json({ status: "ERRO AO CADASTRAR USUARIO" })
                 }
 
             })
@@ -60,7 +66,7 @@ class ControllerUsuario {
         conexao.query('DELETE FROM tbl_usuario WHERE id_usuario = ?',
             [id], function (erro, dados, campos) {
                 if (!erro) {
-                    return res.status(200).json({ status: "USUARIO EXCLUIDO COM SUCESSO" })
+                    return res.status(200).json({ status: "USUARIO EXCLUÍDO COM SUCESSO" })
                 } else {
                     console.log(erro)
                     return res.status(500).json({ status: "ERRO AO EXCLUIR USUARIO" })

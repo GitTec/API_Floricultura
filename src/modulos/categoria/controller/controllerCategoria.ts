@@ -4,9 +4,12 @@ import { conexao } from "../../../db/conexao"
 class ControllerCategoria {
     buscar(req: Request, res: Response) {
         conexao.query("SELECT * FROM tbl_categoria", function (erro, dados, campos) {
-            if (erro)
+            if (erro) {
                 console.log(erro)
-            return res.json(dados);
+                return res.status(500).json({ status: "ERRO AO BUSCAR CATEGORIAS" })
+            } else {
+                return res.status(200).json(dados)
+            }
         })
     }
 
@@ -15,9 +18,12 @@ class ControllerCategoria {
         conexao.query(`SELECT * FROM tbl_categoria WHERE id_categoria = ?`,
             [id],
             function (erro, dados, campos) {
-                if (erro)
+                if (erro) {
                     console.log(erro)
-                return res.json(dados);
+                    return res.status(500).json({ status: "ERRO AO BUSCAR CATEGORIA" })
+                } else {
+                    return res.status(200).json(dados)
+                }
             })
     }
 
@@ -42,7 +48,7 @@ class ControllerCategoria {
             [nome, id],
             function (erro, dados, campos) {
                 if (!erro)
-                    return res.status(201).json({ status: 'CATEGORIA EDITADA COM SUCESSO' })
+                    return res.status(200).json({ status: 'CATEGORIA EDITADA COM SUCESSO' })
                 else {
                     console.log(erro)
                     return res.status(500).json({ status: 'ERRO AO EDITAR CATEGORIA' })
@@ -56,7 +62,7 @@ class ControllerCategoria {
             [id],
             function (erro, dados, campos) {
                 if (!erro) {
-                    return res.status(201).json({ status: "CATEGORIA EXCLUÍDA COM SUCESSO" })
+                    return res.status(200).json({ status: "CATEGORIA EXCLUÍDA COM SUCESSO" })
                 } else {
                     console.log(erro)
                     return res.status(500).json({ status: "ERRO AO EXCLUIR CATEGORIA" })

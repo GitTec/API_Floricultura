@@ -4,9 +4,12 @@ import { conexao } from "../../../db/conexao"
 class ControllerProduto {
     buscar(req: Request, res: Response) {
         conexao.query("SELECT * FROM tbl_produtos", function (erro, dados, campo) {
-            if (erro)
+            if (erro) {
                 console.log(erro)
-            return res.json(dados)
+                return res.status(500).json({ status: "ERRO AO BUSCAR PRODUTOS" })
+            } else {
+                return res.status(200).json(dados)
+            }
         })
     }
 
@@ -15,9 +18,12 @@ class ControllerProduto {
         conexao.query('SELECT * FROM tbl_produtos WHERE id_produtos = ?',
             [id],
             function (erro, dados, campo) {
-                if (erro)
+                if (erro) {
                     console.log(erro)
-                return res.json(dados);
+                    return res.status(500).json({ status: "ERRO AO BUSCAR PRODUTO" })
+                } else {
+                    return res.status(200).json(dados)
+                }
             })
     }
 
