@@ -1,8 +1,42 @@
 import { Request, Response } from "express"
 import { conexao } from "../../../db/conexao"
-import {hash} from "bcryptjs"
+import { hash, compare } from "bcryptjs"
+import { sign } from "jsonwebtoken"
+
 
 class ControllerUsuario {
+
+    login(req: Request, res: Response) {
+        const { login, senha } = req.body
+
+        conexao.query("SELECT * FROM tbl_usuario where login = ?",
+            [login],
+            async function (erro, dados, campos) {
+                if (erro) {
+                    return res.status(500).json({ status: "Falha ao realizar login" })
+                } else {
+                    const estaCorreta = await compare(senha, dados[0].senha)
+                    if (estaCorreta) {
+                        const token = sign(
+                            {
+                                id: dados[0].id_usuario,
+                                email: dados[0].email,
+                            },
+                            String(process.env.JWT_SEGREDO),
+                            {
+                                subject: String(dados[0].id_usuario),
+                                expiresIn: '1h',
+                            }
+                        )
+                        return res.status(200).json({ token })
+                    } else {
+                        return res.status(500).json({ status: "Falha ao realizar login" })
+                    }
+                }
+            })
+
+    }
+
     buscar(req: Request, res: Response) {
         conexao.query("SELECT nome, login, email, id_usuario FROM tbl_usuario",
             function (erro, dados, campos) {
@@ -29,7 +63,7 @@ class ControllerUsuario {
     }
 
     async cadastrar(req: Request, res: Response) {
-        const {nome, login, senha, email} = req.body
+        const { nome, login, senha, email } = req.body
         const senhaCriptografada = await hash(senha, 8)
         conexao.query("INSERT INTO tbl_usuario (nome, login, senha, email) values (?, ?, ?, ?)",
             [nome, login, senhaCriptografada, email],

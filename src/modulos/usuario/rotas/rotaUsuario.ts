@@ -6,6 +6,7 @@ const controller = new ControllerUsuario()
 
 rotasUsuario.get('/', controller.buscar)
 rotasUsuario.get('/:id', controller.encontrar)
+rotasUsuario.post('/login', controller.login)
 rotasUsuario.post('/', controller.cadastrar)
 rotasUsuario.put('/:id', controller.editar)
 rotasUsuario.delete('/:id', controller.excluir)
