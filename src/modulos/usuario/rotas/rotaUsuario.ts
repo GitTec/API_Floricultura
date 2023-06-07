@@ -1,14 +1,15 @@
 import { Router } from "express"
 import { ControllerUsuario } from "../controller/controllerUsuario"
+import { autenticar } from "../middleware/autenticacao"
 
 const rotasUsuario = Router()
 const controller = new ControllerUsuario()
 
-rotasUsuario.get('/', controller.buscar)
-rotasUsuario.get('/:id', controller.encontrar)
+rotasUsuario.get('/',autenticar, controller.buscar)
+rotasUsuario.get('/:id',autenticar, controller.encontrar)
+rotasUsuario.post('/',autenticar, controller.cadastrar)
 rotasUsuario.post('/login', controller.login)
-rotasUsuario.post('/', controller.cadastrar)
-rotasUsuario.put('/:id', controller.editar)
-rotasUsuario.delete('/:id', controller.excluir)
+rotasUsuario.put('/:id',autenticar, controller.editar)
+rotasUsuario.delete('/:id',autenticar, controller.excluir)
 
 export { rotasUsuario }

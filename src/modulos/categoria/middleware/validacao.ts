@@ -3,13 +3,11 @@ import { conexao } from "../../../db/conexao";
 
 
 function validarCadastro(req: Request, res: Response, next: NextFunction) {
-    const { nome, estado_id } = req.body
+    const { nome } = req.body
     if (nome === "") {
         return res.status(500).json({ status: "O NOME É UM CAMPO OBRIGATÓRIO" })
     } else if (typeof (nome) !== "string") {
         return res.status(500).json({ status: "O NOME DA CIDADE NÃO PODE SER NÚMERICO" })
-    } else if (estado_id === "" || estado_id <= 0) {
-        return res.status(500).json({ status: "ESTADO NÃO ENCONTRADO" })
     } else {
         next()
     }
@@ -17,13 +15,11 @@ function validarCadastro(req: Request, res: Response, next: NextFunction) {
 
 function validarEdicao(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
-    const { nome, estado_id } = req.body
+    const { nome } = req.body
     if (nome === "") {
         return res.status(500).json({ status: "O NOME É UM CAMPO OBRIGATÓRIO" })
     } else if (typeof (nome) !== "string") {
-        return res.status(500).json({ status: "O NOME DA CIDADE NÃO PODE SER NÚMERICO" })
-    } else if (estado_id === "" || estado_id <= 0) {
-        return res.status(500).json({ status: "ESTADO NÃO ENCONTRADO" })
+        return res.status(500).json({ status: "O NOME DA CATEGORIA NÃO PODE SER NÚMERICO" })
     } else if (Number(id) <= 0) {
         return res.status(500).json({ status: "ID É OBRIGATÓRIO" })
     } else {
@@ -31,19 +27,18 @@ function validarEdicao(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-//registrar log de acesso, restringir acesso(autenticar), subir arquivos, validar campos
 function validarExclusao(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
-    conexao.query("SELECT * FROM tbl_cidade WHERE id_Cidade = ?",
+    conexao.query(`DELETE FROM tbl_categoria WHERE id_categoria = ?`,
         [id],
         function (erro, dados: any, campos) {
             if (erro) {
                 console.log(erro)
-                return res.status(500).json({ status: "ERRO AO BUSCAR CIDADE" })
+                return res.status(500).json({ status: "ERRO AO BUSCAR CATEGORIA" })
             } else {
                 console.log(dados)
                 if (dados.length === 0) {
-                    return res.status(500).json({ status: "CIDADE NÃO ENCONTRADA" })
+                    return res.status(500).json({ status: "CATEGORIA NÃO ENCONTRADA" })
                 }
                 next()
             }

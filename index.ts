@@ -5,8 +5,6 @@ import { rotasCidade } from "./src/modulos/cidade/rotas/rotaCidade";
 import { rotasProduto } from "./src/modulos/produto/rotas/rotaProduto";
 import { rotasUF } from "./src/modulos/uf/rotas/rotaUF";
 import { rotasUsuario } from "./src/modulos/usuario/rotas/rotaUsuario"
-import { rotasCliente } from "./src/modulos/cliente/rotas/rotaCliente"
-import { rotasCompra } from "./src/modulos/compra/rotas/rotaCompra"
 
 dotenv.config()
 const proj = express()
@@ -15,17 +13,14 @@ proj.use(express.json());
 proj.get('/', (req, res) => {
     return res.send("<h1>SEJA BEM VINDO AO PROJETANDO SUA FLORICULTURA</h1>")
 })
-
 proj.use('/uf', rotasUF)
 proj.use('/categoria', rotasCategoria)
 proj.use('/produto', rotasProduto)
 proj.use('/cidade', rotasCidade)
 proj.use('/usuario', rotasUsuario)
-proj.use('/cliente', rotasCliente)
-proj.use('/compra', rotasCompra)
 
 proj.listen(process.env.PORTA, () => {
-    console.log("Rodando na Porta 3333")
+    console.log("Rodando na Porta 3030")
 })
 
 

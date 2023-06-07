@@ -3,27 +3,21 @@ import { conexao } from "../../../db/conexao"
 
 class ControllerProduto {
     buscar(req: Request, res: Response) {
-        conexao.query("SELECT * FROM tbl_produtos", function (erro, dados, campo) {
-            if (erro) {
+        conexao.query("SELECT p.id_Produtos as id, p.nome_produto, p.preco, p.qtd_estoque,c.id_categoria as id_categoria, c.nome as categoria_nome FROM tbl_produtos p inner join tbl_categoria c on p.categoria_id = c.id_categoria        ", function (erro, dados, campo) {
+            if (erro)
                 console.log(erro)
-                return res.status(500).json({ status: "ERRO AO BUSCAR PRODUTOS" })
-            } else {
-                return res.status(200).json(dados)
-            }
+            return res.json(dados)
         })
     }
 
     encontrar(req: Request, res: Response) {
         const { id } = req.params
-        conexao.query('SELECT * FROM tbl_produtos WHERE id_produtos = ?',
+        conexao.query('SELECT p.id_Produtos as id, p.nome_produto, p.preco, p.qtd_estoque,c.id_categoria as id_categoria, c.nome as categoria_nome FROM tbl_produtos p inner join tbl_categoria c on p.categoria_id = c.id_categoria WHERE p.id_produtos = ?',
             [id],
             function (erro, dados, campo) {
-                if (erro) {
+                if (erro)
                     console.log(erro)
-                    return res.status(500).json({ status: "ERRO AO BUSCAR PRODUTO" })
-                } else {
-                    return res.status(200).json(dados)
-                }
+                return res.json(dados);
             })
     }
 

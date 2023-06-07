@@ -3,27 +3,21 @@ import { conexao } from "../../../db/conexao"
 
 class ControllerCidade {
     buscar(req: Request, res: Response) {
-        conexao.query("SELECT * FROM tbl_cidade", function (erro, dados, campos) {
-            if (erro) {
+        conexao.query("SELECT id_Cidade as id, c.nome as nome, e.nome as estado, e.sigla as sigla_estado, e.id_Estado as id_estado FROM tbl_cidade c inner join tbl_estado e ON e.id_Estado = c.estado_id", function (erro, dados, campos) {
+            if (erro)
                 console.log(erro)
-                return res.status(500).json({ status: "ERRO AO BUSCAR CIDADES" })
-            } else {
-                return res.status(200).json(dados)
-            }
+            return res.json(dados)
         })
     }
 
     encontrar(req: Request, res: Response) {
         const { id } = req.params
-        conexao.query("SELECT * FROM tbl_cidade WHERE id_Cidade = ?",
+        conexao.query("SELECT id_Cidade as id, c.nome as nome, e.nome as estado, e.sigla as sigla_estado, e.id_Estado as id_estado FROM tbl_cidade c inner join tbl_estado e ON e.id_Estado = c.estado_id WHERE c.id_Cidade = ?",
             [id],
             function (erro, dados, campos) {
-                if (erro) {
+                if (erro)
                     console.log(erro)
-                    return res.status(500).json({ status: "ERRO AO BUSCAR CIDADE" })
-                } else {
-                    return res.status(200).json(dados)
-                }
+                return res.json(dados)
             })
     }
 
@@ -62,7 +56,7 @@ class ControllerCidade {
             [id],
             function (erro, dados, campos) {
                 if (!erro) {
-                    return res.status(201).json({ status: "CIDADE EXCLUÍDA COM SUCESSO" })
+                    return res.status(201).json({ status: "CIDADE EXCLUIDA COM SUCESSO" })
                 } else {
                     console.log(erro)
                     return res.status(500).json({ status: "ERRO AO EXCLUIR CIDADE" })
